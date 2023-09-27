@@ -1,8 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "ship.h"
+#include "game.h"
+
 
 using namespace std;
 using namespace sf;
+
+std::vector<Ship*> ships;
 sf::Texture spritesheet;
 sf::Sprite invader;
 
@@ -33,6 +38,7 @@ int main(){
     }
     window.clear();
     window.draw(invader);
+    window.draw(ship);
     window.display();
   }
   return 0;
