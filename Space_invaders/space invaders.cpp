@@ -12,7 +12,7 @@ void Load() {
         cerr << "Failed to load spritesheet!" << std::endl;
     }
     invader.setTexture(spritesheet);
-    invader.setTextureRect(sf::IntRect(sf::Vector2(0, 0), sf::Vector2(32, 32)));
+    invader.setTextureRect(IntRect(Vector2i(0, 0),Vector2i(32, 32)));
 }
 
 void Render(RenderWindow& window) {
@@ -20,10 +20,10 @@ void Render(RenderWindow& window) {
 }
 
 int main(){
-    sf::RenderWindow window(sf::VideoMode({ 200, 200 }), "SFML works!");
+  sf::RenderWindow window(sf::VideoMode({ 200, 200 }), "SFML works!");
   sf::CircleShape shape(100.f);
-  shape.setFillColor(sf::Color::Green);
-
+  //shape.setFillColor(sf::Color::Green);
+  Load();
   while (window.isOpen()){
       sf::Event event;
       while (window.pollEvent(event)){
@@ -32,7 +32,7 @@ int main(){
       }
     }
     window.clear();
-    window.draw(shape);
+    window.draw(invader);
     window.display();
   }
   return 0;
