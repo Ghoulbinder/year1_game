@@ -28,6 +28,12 @@ add_executable(2_INVADERS ${SOURCES} )
 target_include_directories(2_INVADERS SYSTEM PRIVATE ${SFML_INCS})
 target_link_libraries(2_INVADERS sfml-graphics)
 
+## Tile_engine
+file(GLOB_RECURSE SOURCES Tile_Engine/*.cpp Space_invaders/*.h)
+add_executable(3_Tile_Engine ${SOURCES} )
+target_include_directories(3_Tile_Engine SYSTEM PRIVATE ${SFML_INCS})
+target_link_libraries(3_Tile_Engine sfml-graphics)
+
 #### Link Dependencies ####
 foreach (exe ${EXECUTABLES})
   #Set working directory to build dir in visual studio
