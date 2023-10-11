@@ -34,6 +34,12 @@ add_executable(3_Tile_Engine ${SOURCES} )
 target_include_directories(3_Tile_Engine SYSTEM PRIVATE ${SFML_INCS})
 target_link_libraries(3_Tile_Engine sfml-graphics)
 
+## Pac_Man
+file(GLOB_RECURSE SOURCES Pac_Man/*.cpp Space_invaders/*.h)
+add_executable(Pac_Man ${SOURCES} )
+target_include_directories(Pac_Man SYSTEM PRIVATE ${SFML_INCS})
+target_link_libraries(Pac_Man sfml-graphics)
+
 #### Link Dependencies ####
 foreach (exe ${EXECUTABLES})
   #Set working directory to build dir in visual studio
