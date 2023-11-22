@@ -61,12 +61,6 @@ int main() {
     PauseMenu pauseMenu(pauseMenuBackgroundTexture);
 
 
-
-
-
-
-
-
     LevelSystem::loadLevelFile("C:\\Users\\romeo\\year1_game\\res\\levels\\level_1.txt", 35.f); // You'll need to provide the correct path
     
     // Get the start position from the level system
@@ -120,7 +114,7 @@ int main() {
 
         if (!pauseMenu.IsOpen()) {
             // Update game logic when the pause menu is closed
-            myMage.Update(dt);
+            //myMage.Update(dt);
             Bullet::Update(dt);
         }
 
@@ -171,7 +165,7 @@ int main() {
 
 
         if(!pauseMenu.IsOpen()) {
-            window.draw(myMage);
+           // window.draw(myMage);
             Bullet::Render(window);
         }
         else {

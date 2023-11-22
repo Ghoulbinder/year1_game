@@ -13,7 +13,7 @@ float Invader::speed = 0.0f;
 Ship::Ship() {};
 
 //constructor with an initialization list
-Ship::Ship(sf::IntRect ir, sf::Vector2f pos) {
+Ship::Ship(sf::IntRect ir, sf::Vector2f pos) : _sprite() {
     setTexture(spritesheet);
     setTextureRect(_sprite);
     
@@ -38,10 +38,10 @@ void Ship::Explode() {
 
 Invader::Invader() : Ship() {}
 
-Invader::Invader(sf::IntRect ir, sf::Vector2f pos) : Ship(ir) {
+Invader::Invader(sf::IntRect ir, sf::Vector2f pos) : Ship(ir, pos) {
     setOrigin(Vector2f(16.f, 16.f));
-    setPosition(pos);
 }
+
 
 void Invader::Update(const float& dt) {
     Ship::Update(dt);
@@ -67,8 +67,8 @@ void Invader::Explode() {
     // Additional Invader-specific explosion logic
 }
 
-Player::Player() : Ship(IntRect(Vector2i(160, 32), Vector2i(32, 32))) {
-    //setOrigin(Vector2f(16.f, 16.f)); // Center the origin if needed for rotation, etc.
+Player::Player() : Ship(sf::IntRect(Vector2i(160, 32), Vector2i(32, 32)), sf::Vector2f(0, 0)) {
+    setOrigin(Vector2f(16.f, 16.f)); // Center the origin if needed for rotation, etc.
     setPosition({ gameWidth * 0.5f, gameHeight - 32.f });
 }
 
