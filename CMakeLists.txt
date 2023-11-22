@@ -34,11 +34,25 @@ add_executable(3_Tile_Engine ${SOURCES} )
 target_include_directories(3_Tile_Engine SYSTEM PRIVATE ${SFML_INCS})
 target_link_libraries(3_Tile_Engine sfml-graphics)
 
+# Maths lib
+add_library(lib_maths INTERFACE)
+target_sources(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths/maths.h")
+target_include_directories(lib_maths INTERFACE "${CMAKE_SOURCE_DIR}/lib_maths" SYSTEM INTERFACE ${SFML_INCS})
+
+# Add this line to link against lib_maths
+target_link_libraries(3_Tile_Engine lib_maths)
+
 ## Pac_Man
 file(GLOB_RECURSE SOURCES Pac_Man/*.cpp Space_invaders/*.h)
 add_executable(Pac_Man ${SOURCES} )
 target_include_directories(Pac_Man SYSTEM PRIVATE ${SFML_INCS})
 target_link_libraries(Pac_Man sfml-graphics)
+
+## CW_practice
+file(GLOB_RECURSE SOURCES CW_practice/*.cpp Space_invaders/*.h)
+add_executable(CW_practice ${SOURCES} )
+target_include_directories(CW_practice SYSTEM PRIVATE ${SFML_INCS})
+target_link_libraries(CW_practice sfml-graphics)
 
 #### Link Dependencies ####
 foreach (exe ${EXECUTABLES})

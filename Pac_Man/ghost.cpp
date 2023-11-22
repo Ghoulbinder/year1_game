@@ -1,11 +1,12 @@
 //ghost.cpp
 #include "ghost.h"
+
 using namespace sf;
 using namespace std;
 
 
 Ghost::Ghost()
-    : _speed(200.0f), Entity(make_unique<CircleShape>(25.f)) {
+   : _speed(200.0f), Entity(std::make_unique<CircleShape>(25.f)) {
     _shape->setFillColor(Color::Red);
     _shape->setOrigin(Vector2f(25.f, 25.f));
 
@@ -19,9 +20,10 @@ void Ghost::Update(double dt) {
     // Make the ghost move randomly
     int dx = (rand() % 3) - 1; // Generates a random number between -1 and 1
     int dy = (rand() % 3) - 1; // Generates a random number between -1 and 1
-    sf::Vector2f offset(dx * dt, dy * dt);
+    sf::Vector2f offset(dx, dy);
 
-    move(offset);
+    _shape->move(offset);
+
 
     Entity::Update(dt);
 }

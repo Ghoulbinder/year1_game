@@ -2,87 +2,121 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include "system_renderer.h"
+#include "pacman.h"
 #include "entity.h"  // Include the Entity class header
 #include "player.h"  // Include the Player class header
 #include "ghost.h"   // Include the Ghost class header
+#include "EntityManager.h"
+
+
+
 
 using namespace std;
 using namespace sf;
 
+// Function declarations
+void load();
+void update(RenderWindow& window, EntityManager& em, shared_ptr<Scene>& activeScene, Clock& clock);
+
+// Function definitions
+
+void load(RenderWindow& window, EntityManager& em, shared_ptr<Scene>& menuScene, shared_ptr<Scene>& gameScene, shared_ptr<Scene>& activeScene) {
+    Renderer::initialise(window);
 
 
-
-
-void load() {
-
-
-}
-
-
-
-void Update(RenderWindow& window) {
-
-
-}
-
-
-int main() 
-{
-
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Pac-Man"); // Create a window with a size of 800x600 pixels and a title "SFML Window".
-    
     // Create entities
-    Player player;
+    auto player = make_shared<Player>();
+    auto ghost1 = make_shared<Ghost>();
+    auto ghost2 = make_shared<Ghost>();
+    auto ghost3 = make_shared<Ghost>();
+    auto ghost4 = make_shared<Ghost>();
 
-    player.setPosition(sf::Vector2f(400.f, 300.f)); 
-    Ghost ghost1, ghost2, ghost3, ghost4;
-    
-    ghost1.setPosition(sf::Vector2f(200.f, 150.f));
-    ghost2.setPosition(sf::Vector2f(200.f, 450.f));
-    ghost3.setPosition(sf::Vector2f(600.f, 150.f));
-    ghost4.setPosition(sf::Vector2f(600.f, 450.f));
+    // Set positions for entities
+    player->setPosition(Vector2f(400.f, 300.f));
+    ghost1->setPosition(Vector2f(200.f, 150.f));
+    ghost2->setPosition(Vector2f(200.f, 450.f));
+    ghost3->setPosition(Vector2f(600.f, 150.f));
+    ghost4->setPosition(Vector2f(600.f, 450.f));
 
-    // Create a vector to hold Entity pointers
-    std::vector<Entity*> entities;
+    // Add entities to EntityManager
+    em.list.push_back(player);
+    em.list.push_back(ghost1);
+    em.list.push_back(ghost2);
+    em.list.push_back(ghost3);
+    em.list.push_back(ghost4);
 
-    // Add the entities to the vector
-    entities.push_back(&player);
-    entities.push_back(&ghost1);
-    entities.push_back(&ghost2);
-    entities.push_back(&ghost3);
-    entities.push_back(&ghost4);
+    // Create and initialize scenes
+    MenuScene menu;
+    GameScene game;
+    menuScene = make_shared<MenuScene>(menu);
+    gameScene = make_shared<GameScene>(game);
+    activeScene = menuScene; // Start with the menu scene
+}
 
 
-
-
-    while (window.isOpen()) { // Start a game loop that continues as long as the window is open.
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close(); // Close the window if the close button is clicked.
-            }
+void update(RenderWindow& window, EntityManager& em, shared_ptr<Scene>& activeScene, Clock& clock) {
+    float dt = clock.restart().asSeconds(); // Calculate delta time
+    cout << "Updating scene..." << endl; // Debug output to ensure this function is being called
+    // Check for key presses and update scenes
+    if (activeScene == menuScene) {
+        cout << "Currently in MenuScene" << endl; // Debug output for current scene
+        if (Keyboard::isKeyPressed(Keyboard::Space)) {
+            cout << "Space key pressed in MenuScene" << endl;
+            activeScene = gameScene; // Switch to the GameScene
         }
-
-        static Clock clock;
-        // Update player
-        float dt = clock.restart().asSeconds();
-      
-        // Update entities
-        for (auto& entity : entities) {
-            entity->Update(dt);
-        }
-
-        window.clear(); // Clear the window.
-
-        
-        // Render entities
-        for (const auto& entity : entities) {
-            entity->Render(window);
-           
-            
-            window.display(); // Display the contents of the window.
+    }
+    else if (activeScene == gameScene) {
+        cout << "Currently in GameScene" << endl; // Debug output for current scene
+        if (Keyboard::isKeyPressed(Keyboard::Tab)) {
+            cout << "Tab key pressed in GameScene" << endl;
+            activeScene = menuScene; // Switch to the MenuScene
         }
     }
 
-    return 0; // Return 0 to indicate successful execution.
+    activeScene->update(dt); // Update the active scene
+    em.update(dt);           // Update EntityManager
 }
+
+int main() {
+    RenderWindow window(VideoMode(800, 600), "Pac-Man"); // Create a window
+
+   
+
+    //shared_ptr<MenuScene> menuScene;
+    //shared_ptr<GameScene> gameScene;
+    //shared_ptr<Scene> menuScene;
+    // shared_ptr<Scene> gameScene;
+
+    // Declare variables to hold game state
+    EntityManager em;
+    std::shared_ptr<Scene> menuScene = std::make_shared<MenuScene>();
+    std::shared_ptr<Scene> gameScene = std::make_shared<GameScene>();
+    shared_ptr<Scene> activeScene; 
+    Clock clock;
+
+    load(window, em, menuScene, gameScene, activeScene); // Call load function
+
+    while (window.isOpen()) {
+        Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == Event::Closed) {
+                window.close();
+            }
+        }
+
+       
+
+        window.clear(); // Clear the window
+
+        // Render the active scene and entities
+        update(window, em, activeScene, clock); // Call update function
+        activeScene->render(window);
+        em.render(window);
+
+        window.display(); // Display the contents of the window
+    }
+
+    return 0;
+}
+
