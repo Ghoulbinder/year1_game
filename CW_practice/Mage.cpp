@@ -8,8 +8,8 @@ Mage::Mage(sf::IntRect ir, sf::Vector2f pos)
     : Ship(),
     walkDownAnimation(0, 0, 35, 37, 4, 0.2f), // Set the sprite size to 35x37 pixels
     walkUpAnimation(0, 38, 35, 37, 4, 0.2f), // Assuming each row is 37 pixels apart
-    walkLeftAnimation(0, 75, 35, 37, 4, 0.2f), // 2 rows down
-    walkRightAnimation(0, 112, 35, 37, 4, 0.2f), // Set the sprite size to 35x37 pixels
+    walkRightAnimation(0, 75, 35, 37, 4, 0.2f), // 2 rows down
+    walkLeftAnimation(0, 112, 35, 37, 4, 0.2f), // Set the sprite size to 35x37 pixels
     speed(100.f) // Set this to your desired speed
 {
     setPosition(pos);
@@ -143,16 +143,16 @@ void Mage::Update(const float& dt) {
         walkUpAnimation.ApplyToSprite(*this);
         break;
     case Direction::Left:
-        // Flip the sprite horizontally when moving left
-        setScale(-1.f, 1.f);
-        walkLeftAnimation.Update(dt);
-        walkLeftAnimation.ApplyToSprite(*this);
+        walkRightAnimation.Update(dt); // Use walkRightAnimation when moving left
+        walkRightAnimation.ApplyToSprite(*this);
+        setScale(-1.f, 1.f); // Flip the sprite horizontally
         break;
     case Direction::Right:
-        // Flip the sprite horizontally when moving right
-        setScale(1.f, 1.f);
-        walkLeftAnimation.Update(dt);
-        walkLeftAnimation.ApplyToSprite(*this);
+        walkRightAnimation.Update(dt);
+        walkRightAnimation.ApplyToSprite(*this);
+        setScale(1.f, 1.f); // Reset the sprite scale
         break;
+
+
     }
 }
