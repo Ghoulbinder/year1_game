@@ -17,6 +17,10 @@ Mage::Mage(sf::IntRect ir, sf::Vector2f pos)
     // Set the origin of the sprite to its center
     sf::FloatRect bounds = getLocalBounds();
     setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+
+    // Set the spritesheet texture to the Mage sprite
+    setTexture(spritesheet);
+    setTextureRect(ir);
 }
 
 void Mage::FireBullet(bool mode) {
@@ -32,6 +36,9 @@ void Mage::FireBullet(bool mode) {
 void Mage::Update(const float& dt) {
     // Store the current position before moving
     sf::Vector2f currentPosition = getPosition();
+
+    // Store the current direction before handling keyboard input
+    Direction previousDirection = currentDirection;
 
 
     // Handle keyboard input for movement
@@ -98,6 +105,24 @@ void Mage::Update(const float& dt) {
         }
     }
 
+    // Check if the direction has changed and reset the animation frame if it has
+    if (currentDirection != previousDirection) {
+        switch (currentDirection) {
+        case Direction::Down:
+            walkDownAnimation.Reset(); // Reset the animation frame for down
+            break;
+        case Direction::Up:
+            walkUpAnimation.Reset(); // Reset the animation frame for up
+            break;
+        case Direction::Left:
+            walkLeftAnimation.Reset(); // Reset the animation frame for left
+            break;
+        case Direction::Right:
+            walkRightAnimation.Reset(); // Reset the animation frame for right
+            break;
+        }
+    }
+
 
     // Check for collisions with walls
     sf::Vector2ul tilePosition(static_cast<unsigned>(currentPosition.x / 35), static_cast<unsigned>(currentPosition.y / 35));
@@ -118,6 +143,8 @@ void Mage::Update(const float& dt) {
         walkUpAnimation.ApplyToSprite(*this);
         break;
     case Direction::Left:
+        // Flip the sprite horizontally when moving left
+        setScale(-1.f, 1.f);
         walkLeftAnimation.Update(dt);
         walkLeftAnimation.ApplyToSprite(*this);
         break;

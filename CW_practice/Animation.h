@@ -9,6 +9,11 @@ public:
     // Updated constructor with new parameters
     Animation(unsigned x, unsigned y, unsigned frameWidth, unsigned frameHeight, unsigned numFrames, float holdTime);
 
+    // Reset the animation to its initial frame
+    void Reset() {
+        iFrame = 0;
+        time = 0.0f;
+    }
 
     void ApplyToSprite(sf::Sprite& s) const;
     void Update(float dt);
