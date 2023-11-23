@@ -4,8 +4,11 @@
 
 class Animation {
 public:
+
+
     // Updated constructor with new parameters
     Animation(unsigned x, unsigned y, unsigned frameWidth, unsigned frameHeight, unsigned numFrames, float holdTime);
+
 
     void ApplyToSprite(sf::Sprite& s) const;
     void Update(float dt);

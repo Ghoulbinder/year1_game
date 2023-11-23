@@ -24,9 +24,10 @@ private:
     float speed;
 };
 
-//// Implementation of the constructor
+// Implementation of the constructor
 //Mage::Mage(sf::IntRect ir, sf::Vector2f pos)
 //    : Ship(ir, pos) {
 //    // Initialize other properties of the Mage
 //    // ...
 //}
+//

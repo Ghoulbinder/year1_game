@@ -8,8 +8,6 @@
 #include "PauseMenu.h"
 
 
-
-
 using namespace std;
 using namespace sf;
 
@@ -85,7 +83,8 @@ int main() {
         myMage.FireBullet(false); // Assuming false means it's a player bullet
     }
 
-    sf::Clock clock; // Declare an sf::Clock object
+    // Declare an sf::Clock object
+    sf::Clock clock; 
 
 
     sf::Sprite backgroundSprite(backgroundTexture);
@@ -114,7 +113,7 @@ int main() {
 
         if (!pauseMenu.IsOpen()) {
             // Update game logic when the pause menu is closed
-            //myMage.Update(dt);
+            myMage.Update(dt);
             Bullet::Update(dt);
         }
 
@@ -125,7 +124,7 @@ int main() {
         myMage.Update(dt);
 
         // Update all bullets
-        Bullet::Update(dt); // <-- Add this line to update the bullets
+        Bullet::Update(dt); 
         // Draw the background
         window.draw(backgroundSprite);
         // Render the tilemap on top of the background
@@ -140,12 +139,15 @@ int main() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
             // Check if the spacebar was not pressed in the previous frame
             if (!spacebarPressed) {
-                myMage.FireBullet(false); // Assuming false means it's a player bullet
+                // Assuming false means it's a player bullet
+                myMage.FireBullet(false); 
             }
-            spacebarPressed = true; // Set the flag to true when spacebar is pressed
+            // Set the flag to true when spacebar is pressed
+            spacebarPressed = true; 
         }
         else {
-            spacebarPressed = false; // Reset the flag when spacebar is released
+            // Reset the flag when spacebar is released
+            spacebarPressed = false; 
         }
 
 
@@ -165,7 +167,7 @@ int main() {
 
 
         if(!pauseMenu.IsOpen()) {
-           // window.draw(myMage);
+            window.draw(myMage);
             Bullet::Render(window);
         }
         else {
