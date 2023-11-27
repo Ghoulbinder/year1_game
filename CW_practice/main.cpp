@@ -47,7 +47,7 @@ int main() {
     Load();
 
     // Initialize the bullet pool here
-    //InitializeBulletPool();
+   //InitializeBulletPool();
 
      // Initialize the game state to Playing
     GameState gameState = GameState::Playing;
@@ -127,11 +127,7 @@ int main() {
 
         window.clear();
 
-        //if (gameState == GameState::Paused) {
-        //    sf::Sprite PauseSprite(pauseMenuBackgroundTexture);
-        //    window.draw(PauseSprite);
-        //}
-
+        //gamestates
         if (gameState == GameState::Playing) {
             // Place all update logic here
             myMage.Update(dt);
