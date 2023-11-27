@@ -55,7 +55,7 @@ int main() {
     GameState gameState = GameState::Playing;
 
 
-      // Load the background image for the pause menu
+    // Load the background image for the pause menu
     sf::Texture pauseMenuBackgroundTexture;
     if (!pauseMenuBackgroundTexture.loadFromFile("C:/Users/romeo/year1_game/res/img/book_pages.png")) {
         std::cerr << "Failed to load pause menu background image." << std::endl;
@@ -67,7 +67,7 @@ int main() {
 
 
     LevelSystem::loadLevelFile("C:\\Users\\romeo\\year1_game\\res\\levels\\level_2.txt", 35.f); // You'll need to provide the correct path
-    
+
     // Get the start position from the level system
     sf::Vector2f startPos = LevelSystem::getStartTilePosition();
     if (startPos.x < 0 || startPos.y < 0) {
@@ -76,7 +76,7 @@ int main() {
     }
 
     //create a Mage instance
-        Mage myMage(sf::IntRect(0, 0, 35, 37), startPos); 
+    Mage myMage(sf::IntRect(0, 0, 35, 37), startPos);
 
 
     // Load the background image
@@ -91,10 +91,14 @@ int main() {
     }
 
     // Declare an sf::Clock object
-    sf::Clock clock; 
+    sf::Clock clock;
 
 
     sf::Sprite backgroundSprite(backgroundTexture);
+
+    // Create a sprite for the pause menu 
+    sf::Sprite PauseSprite(pauseMenuBackgroundTexture);
+
 
     // Variable to track whether the spacebar was previously pressed
     bool spacebarPressed = false;
@@ -118,12 +122,17 @@ int main() {
             std::cout << "Game state changed to: " << ((gameState == GameState::Paused) ? "Paused" : "Playing") << std::endl;
         }
         prevPKeyPressed = pKeyCurrentlyPressed;
-        
+
 
         // Update the previous key state
         prevPKeyPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::P);
 
         window.clear();
+
+        //if (gameState == GameState::Paused) {
+        //    sf::Sprite PauseSprite(pauseMenuBackgroundTexture);
+        //    window.draw(PauseSprite);
+        //}
 
         if (gameState == GameState::Playing) {
             // Place all update logic here
@@ -149,11 +158,9 @@ int main() {
 
         }
         else if (gameState == GameState::Paused) {
-            // Draw the pause menu here
-            pauseMenu.Display(window);
+            // Draw the pause menu here 
+            window.draw(PauseSprite);
         }
-
-
 
         window.display();
     }
