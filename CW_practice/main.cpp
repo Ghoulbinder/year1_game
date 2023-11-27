@@ -1,21 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Ship.h"
+#include "Entity.h"
 #include "Game.h"
 #include "Bullet.h"
 #include "LevelSystem.h"
-#include "Mage.h"
 #include "PauseMenu.h"
 
 
 using namespace std;
 using namespace sf;
 
-std::vector<Ship*> ships;
 sf::Texture spritesheet;
 sf::Texture bulletTexture; // Declare a texture for the bullet
 sf::Sprite invader;
-Ship* player = nullptr;
+Mage* playerMage = nullptr; // Initialize the static member
 std::vector<Bullet*> bullets;
 PauseMenu pauseMenu;
 

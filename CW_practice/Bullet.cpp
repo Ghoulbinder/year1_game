@@ -1,6 +1,7 @@
 #include "bullet.h"
 #include "game.h"
-#include "ship.h"
+#include "Entity.h"
+
 using namespace sf;
 using namespace std;
 
@@ -19,6 +20,8 @@ Bullet::Bullet(const sf::Vector2f& pos, const bool mode) : _mode(mode) {
 
 }
 
+std::vector<Entity*> entities; // This should be declared and populated somewhere in your code
+
 void Bullet::Update(const float& dt) {
     for (unsigned char i = 0; i < bulletPointer; ++i) {
         if (bullets[i].isActive()) {
@@ -33,23 +36,24 @@ void Bullet::Update(const float& dt) {
             else {
                 // Check for collision with ships
                 const FloatRect boundingBox = bullets[i].getGlobalBounds();
-                for (auto s : ships) {
+                for (auto s : entities) {
                     // Make sure 'player' is a defined pointer to the player's ship
-                    if (!bullets[i]._mode && s == player) {
-                        // Player bullets don't collide with the player
-                        continue;
-                    }
-                    if (bullets[i]._mode && s != player) {
-                        // Invader bullets don't collide with other invaders
-                        continue;
-                    }
-                    if (!s->is_exploded() && s->getGlobalBounds().intersects(boundingBox)) {
-                        // Explode the ship
-                        s->Explode();
-                        // Warp bullet off-screen
-                        bullets[i].setPosition(Vector2f(-100, -100));
-                        bullets[i]._active = false; // Deactivate the bullet
-                        break; // Exit the loop as the bullet has hit a ship
+                    for (auto s : entities) {
+                        // Assuming 'player' is of type 'Entity*' or a derived class of 'Entity'
+                        if (!bullets[i]._mode && s == playerMage) {
+                            continue;
+                        }
+                        if (bullets[i]._mode && s != playerMage) {
+                            continue;
+                        }
+                        if (!s->is_exploded() && s->getGlobalBounds().intersects(boundingBox)) {
+                            // Explode the ship
+                            s->Explode();
+                            // Warp bullet off-screen
+                            bullets[i].setPosition(Vector2f(-100, -100));
+                            bullets[i]._active = false; // Deactivate the bullet
+                            break; // Exit the loop as the bullet has hit a ship
+                        }
                     }
                 }
             }

@@ -4,7 +4,7 @@
 #include <vector>
 
 
-class Ship;
+class Entity;
 class Bullet; // forward-declare Bullet
 
 constexpr uint16_t gameWidth = 800;
@@ -13,6 +13,6 @@ constexpr uint16_t invaders_rows = 5;
 constexpr uint16_t invaders_columns = 12;
 
 extern sf::Texture spritesheet;
-extern std::vector<Ship*> ships;
-extern Ship* player;
+extern std::vector<Entity*> ships;
+extern Entity* player;
 extern std::vector<Bullet*> bullets;
