@@ -1,17 +1,26 @@
-#include "bullet.h"
-#include "game.h"
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include "Bullet.h"
+#include "Game.h"
 #include "Entity.h"
 
 using namespace sf;
 using namespace std;
 
 
+
 unsigned char Bullet::bulletPointer = 0;
 Bullet Bullet::bullets[256];
+std::vector<Entity*> entities;
+
+
+
+
 
 // Default constructor (might be private if you only create bullets through Fire method)
 Bullet::Bullet() {
-    // You might want to set default values here
+    std::cout << "Constructing a Bullet" << std::endl;
+    _active = false; // Initialize to inactive by default
 }
 
 Bullet::Bullet(const sf::Vector2f& pos, const bool mode) : _mode(mode) {
@@ -20,7 +29,6 @@ Bullet::Bullet(const sf::Vector2f& pos, const bool mode) : _mode(mode) {
 
 }
 
-std::vector<Entity*> entities; // This should be declared and populated somewhere in your code
 
 void Bullet::Update(const float& dt) {
     for (unsigned char i = 0; i < bulletPointer; ++i) {
@@ -69,30 +77,54 @@ void Bullet::Render(sf::RenderWindow& window) {
         }
     }
 }
-// Static method to initialize the bullets (e.g., during game setup)
+
 void Bullet::Init() {
+    std::cout << "Initializing bullets..." << std::endl;
     for (unsigned char i = 0; i < 256; ++i) {
+        std::cout << "Constructing bullet " << static_cast<int>(i) << std::endl;
         bullets[i] = Bullet(); // Calls the default constructor
-        bullets[i].setPosition(-100, -100); // Off-screen or inactive position
+        bullets[i].setPosition(-100, -100);
     }
+    std::cout << "Bullet initialization completed." << std::endl;
 }
+
+
+
 void Bullet::Fire(const sf::Vector2f& pos, const bool mode) {
-    // Here you would need to implement logic to find an inactive bullet and activate it.
-    // // Check if bulletPointer exceeds 255 (maximum index), and wrap it back to 0 if needed
-    if (bulletPointer >= 255) {
+    unsigned char start = bulletPointer;
+    bool allActive = true;
+
+    do {
+        if (!bullets[bulletPointer].isActive()) {
+            bullets[bulletPointer].setPosition(pos);
+            bullets[bulletPointer]._mode = mode;
+            bullets[bulletPointer]._active = true;
+            allActive = false;
+            break;
+        }
+
+        bulletPointer++;
+        if (bulletPointer >= 256) {
+            bulletPointer = 0;
+        }
+    } while (bulletPointer != start);
+
+    if (allActive) {
+        std::cerr << "All bullets are active, unable to fire a new one." << std::endl;
+        // Handle the situation when all bullets are active (e.g., skip firing a bullet)
+        return;
+    }
+
+    bulletPointer++;
+    if (bulletPointer >= 256) {
         bulletPointer = 0;
     }
-    // For example:
-    bullets[bulletPointer].setPosition(pos);
-    bullets[bulletPointer]._mode = mode;
-    // Set the bullet to active
-    bulletPointer++; // Move to the next bullet in the pool
-    // Note: you should also include logic to wrap the bulletPointer around to 0 if it exceeds 255
 }
-// You would also need to implement a method to determine if a bullet is active
+
+// a method to determine if a bullet is active
 bool Bullet::isActive() const {
-    // This method should check if the bullet is currently active.
-    // You might use position, a boolean flag, or some other mechanism to determine this.
-    return getPosition().x >= 0 && getPosition().y >= 0 && _active;
+    //bullet is considered active if it's within the screen boundaries
+    return getPosition().x >= 0 && getPosition().x <= gameWidth &&
+           getPosition().y >= 0 && getPosition().y <= gameHeight && _active;
 
 }

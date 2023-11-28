@@ -18,6 +18,8 @@ public:
 	bool isActive() const; // Declare isActive method
 
 	~Bullet() = default;
+
+
 protected:
 	static unsigned char bulletPointer;
 	static Bullet bullets[256];

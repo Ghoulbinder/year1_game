@@ -24,20 +24,29 @@ enum class GameState {
 
 // Function to initialize the bullet pool
 void InitializeBulletPool() {
+    std::cout << "Initializing Bullet Pool..." << std::endl; // Debug statement
     Bullet::Init();
+    std::cout << "Bullet Pool Initialized." << std::endl; // Debug statement
 }
 
 
 void Load() {
     if (!spritesheet.loadFromFile("C:/Users/romeo/year1_game/res/img/mage.png")) {
         std::cerr << "Failed to load spritesheet." << std::endl;
-        // Handle the error, e.g., exit the program
+        
     }
+    else {
+        std::cout << "Mage spritesheet loaded successfully." << std::endl; // Debug statement
+    }
+
     // Load the texture for the bullet
-    if (!bulletTexture.loadFromFile("C:/Users/romeo/year1_game/res/img/Fireball-1.png")) {
-        std::cerr << "Failed to load bullet texture." << std::endl;
-        // Handle the error, e.g., exit the program
+    if (!spritesheet.loadFromFile("C:/Users/romeo/year1_game/res/img/mage.png")) {
+        std::cerr << "Failed to load spritesheet." << std::endl;
     }
+    else {
+        std::cout << "Bullet spritesheet loaded successfully." << std::endl; // Debug statement
+    }
+
    
 }
 
@@ -100,11 +109,12 @@ int main() {
 
     // Variable to track whether the spacebar was previously pressed
     bool spacebarPressed = false;
-
+   
     // Variable to track whether the 'P' key was pressed in the previous frame
     static bool prevPKeyPressed = false;
 
     while (window.isOpen()) {
+        
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -112,6 +122,7 @@ int main() {
             }
         }
         float dt = clock.restart().asSeconds();
+
 
 
         bool pKeyCurrentlyPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::P);
@@ -157,6 +168,7 @@ int main() {
         }
 
         window.display();
+       
     }
 
     return 0;
