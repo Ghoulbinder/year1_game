@@ -7,124 +7,102 @@
 using namespace sf;
 using namespace std;
 
-
-
 unsigned char Bullet::bulletPointer = 0;
 Bullet Bullet::bullets[256];
 std::vector<Entity*> entities;
 
-
-
-
-
-// Default constructor (might be private if you only create bullets through Fire method)
-Bullet::Bullet() {
-    std::cout << "Constructing a Bullet" << std::endl;
-    _active = false; // Initialize to inactive by default
+// Default constructor
+Bullet::Bullet() : _active(false), _mode(false) {
+    setPosition(-100, -100); // Initialize with off-screen position
 }
 
-Bullet::Bullet(const sf::Vector2f& pos, const bool mode) : _mode(mode) {
-    setTexture(spritesheet);
+Bullet::Bullet(const Vector2f& pos, const bool mode) : _mode(mode), _active(true) {
+    setTexture(spritesheet); // Assuming spritesheet is globally accessible
     setPosition(pos);
-
 }
-
 
 void Bullet::Update(const float& dt) {
-    for (unsigned char i = 0; i < bulletPointer; ++i) {
-        if (bullets[i].isActive()) {
-            // Move each active bullet
-            bullets[i].move(Vector2f(0, dt * 200.0f * (bullets[i]._mode ? 1.0f : -1.0f)));
+    for (auto& bullet : bullets) {
+        if (bullet.isActive()) {
+            // Move bullet
+            float direction = bullet.getMode() ? 1.0f : -1.0f; // Assuming getMode() is a method to access _mode
+            bullet.move(0, dt * 200.0f * direction);
 
-            // Check if the bullet is off-screen
-            if (bullets[i].getPosition().y < -32 || bullets[i].getPosition().y > gameHeight + 32) {
-                // Deactivate off-screen bullet
-                bullets[i]._active = false; // Assuming _active is a member that tracks if a bullet is active
+            // Check off-screen
+            if (bullet.getPosition().y < -32 || bullet.getPosition().y > gameHeight + 32) {
+                bullet.deactivate();
             }
             else {
-                // Check for collision with ships
-                const FloatRect boundingBox = bullets[i].getGlobalBounds();
-                for (auto s : entities) {
-                    // Make sure 'player' is a defined pointer to the player's ship
-                    for (auto s : entities) {
-                        // Assuming 'player' is of type 'Entity*' or a derived class of 'Entity'
-                        if (!bullets[i]._mode && s == playerMage) {
-                            continue;
-                        }
-                        if (bullets[i]._mode && s != playerMage) {
-                            continue;
-                        }
-                        if (!s->is_exploded() && s->getGlobalBounds().intersects(boundingBox)) {
-                            // Explode the ship
-                            s->Explode();
-                            // Warp bullet off-screen
-                            bullets[i].setPosition(Vector2f(-100, -100));
-                            bullets[i]._active = false; // Deactivate the bullet
-                            break; // Exit the loop as the bullet has hit a ship
-                        }
-                    }
-                }
+                bullet.checkCollisions(); // Assuming checkCollisions is a method of Bullet
             }
         }
     }
 }
 
-// Static method to render all bullets in the pool
-void Bullet::Render(sf::RenderWindow& window) {
-    for (unsigned char i = 0; i < bulletPointer; ++i) {
-        if (bullets[i].isActive()) {
-            window.draw(bullets[i]);
+bool Bullet::getMode() const {
+    return _mode;
+}
+
+void Bullet::checkCollisions() {
+    // Implement collision logic here
+}
+
+
+void Bullet::Render(RenderWindow& window) {
+    for (const auto& bullet : bullets) {
+        if (bullet.isActive()) {
+            window.draw(bullet);
         }
     }
 }
 
 void Bullet::Init() {
-    std::cout << "Initializing bullets..." << std::endl;
-    for (unsigned char i = 0; i < 256; ++i) {
-        std::cout << "Constructing bullet " << static_cast<int>(i) << std::endl;
-        bullets[i] = Bullet(); // Calls the default constructor
-        bullets[i].setPosition(-100, -100);
+    cout << "Initializing bullets..." << endl;
+    for (auto& bullet : bullets) {
+        bullet.deactivate();
     }
-    std::cout << "Bullet initialization completed." << std::endl;
+    cout << "Bullet initialization completed." << endl;
 }
 
+void Bullet::Fire(const Vector2f& pos, const bool mode) {
+    Bullet& bullet = bullets[bulletPointer];
+    if (!bullet.isActive()) {
+        bullet.activate(pos, mode);
+    }
 
+    bulletPointer = (bulletPointer + 1) % 256;
+}
 
-void Bullet::Fire(const sf::Vector2f& pos, const bool mode) {
-    unsigned char start = bulletPointer;
-    bool allActive = true;
+bool Bullet::isActive() const {
+    return _active;
+}
 
-    do {
-        if (!bullets[bulletPointer].isActive()) {
-            bullets[bulletPointer].setPosition(pos);
-            bullets[bulletPointer]._mode = mode;
-            bullets[bulletPointer]._active = true;
-            allActive = false;
+void Bullet::checkCollisions(Bullet& bullet) {
+    FloatRect boundingBox = bullet.getGlobalBounds();
+    for (auto* entity : entities) {
+        if ((bullet._mode && entity != playerMage) || (!bullet._mode && entity == playerMage)) {
+            continue;
+        }
+
+        if (entity->is_exploded()) {
+            continue;
+        }
+
+        if (entity->getGlobalBounds().intersects(boundingBox)) {
+            entity->Explode();
+            bullet.deactivate();
             break;
         }
-
-        bulletPointer++;
-        if (bulletPointer >= 256) {
-            bulletPointer = 0;
-        }
-    } while (bulletPointer != start);
-
-    if (allActive) {
-        std::cerr << "All bullets are active, unable to fire a new one." << std::endl;
-        // Handle the situation when all bullets are active (e.g., skip firing a bullet)
-        return;
-    }
-
-    bulletPointer++;
-    if (bulletPointer >= 256) {
-        bulletPointer = 0;
     }
 }
 
-// a method to determine if a bullet is active
-bool Bullet::isActive() const {
-    //bullet is considered active if it's within the screen boundaries
-    return getPosition().x >= 0 && getPosition().x <= gameWidth &&
-           getPosition().y >= 0 && getPosition().y <= gameHeight && _active;
+void Bullet::activate(const Vector2f& pos, bool mode) {
+    setPosition(pos);
+    _mode = mode;
+    _active = true;
+}
 
+void Bullet::deactivate() {
+    setPosition(-100, -100);
+    _active = false;
 }

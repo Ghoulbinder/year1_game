@@ -10,6 +10,7 @@
 using namespace std;
 using namespace sf;
 
+
 sf::Texture spritesheet;
 sf::Texture bulletTexture; // Declare a texture for the bullet
 sf::Sprite invader;
@@ -56,7 +57,7 @@ int main() {
     Load();
 
     // Initialize the bullet pool here
-   //InitializeBulletPool();
+   InitializeBulletPool();
 
      // Initialize the game state to Playing
     GameState gameState = GameState::Playing;

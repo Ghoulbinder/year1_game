@@ -18,6 +18,16 @@ public:
 	bool isActive() const; // Declare isActive method
 
 	~Bullet() = default;
+	void activate(const sf::Vector2f& pos, bool mode);
+	void deactivate();
+	bool getMode() const;
+
+private:
+	// ... other members ...
+
+	void checkCollisions();
+
+	// ... other members ...
 
 
 protected:
@@ -27,5 +37,6 @@ protected:
 	Bullet();
 	//false=player bullet, true=Enemy bullet
 	bool _mode;
+	void checkCollisions(Bullet& bullet); // private member function for collision checking
 };
 
