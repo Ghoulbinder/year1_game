@@ -26,14 +26,7 @@ Entity::~Entity() {
     // Implementation of pure virtual destructor, even if it's empty
 }
 
-bool Entity::is_exploded() const {
-    return _exploded;
-}
 
-void Entity::Explode() {
-    setTextureRect(IntRect(Vector2i(128, 32), Vector2i(32, 32)));
-    _exploded = true;
-}
 
 Mage::Mage(sf::IntRect ir, sf::Vector2f pos)
     : Entity(),
@@ -54,7 +47,7 @@ Mage::Mage(sf::IntRect ir, sf::Vector2f pos)
     setTextureRect(ir);
 }
 
-void Mage::FireBullet(bool mode) {
+void Mage::FireBullet(bool mode, const sf::Vector2f& direction) {
     // Debug statement to indicate this method is called
     std::cout << "Mage::FireBullet called" << std::endl;
 
@@ -65,7 +58,7 @@ void Mage::FireBullet(bool mode) {
     bulletPosition.y += getLocalBounds().height / 2.0f; // Center vertically
 
     // Fire the bullet from the calculated position
-    Bullet::Fire(bulletPosition, mode);
+    Bullet::Fire(getPosition(), mode, direction);
 }
 
 void Mage::Update(const float& dt) {

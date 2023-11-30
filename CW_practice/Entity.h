@@ -12,8 +12,7 @@ protected:
     //Default constructor is hidden
     Entity();
 public:
-    virtual bool is_exploded() const;
-    virtual void Explode();
+  
     static bool direction;
     static float speed;
     //Constructor that takes a sprite
@@ -28,7 +27,7 @@ public:
     Mage(); // Default constructor declaration
     Mage(sf::IntRect ir, sf::Vector2f pos);
     void Update(const float& dt) override;
-    void FireBullet(bool mode);
+    void FireBullet(bool mode, const sf::Vector2f& direction);
 
 private:
     Animation walkDownAnimation;

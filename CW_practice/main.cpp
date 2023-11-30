@@ -96,8 +96,14 @@ int main() {
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        myMage.FireBullet(false); // Assuming false means it's a player bullet
+        sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+        sf::Vector2f direction = mousePos - myMage.getPosition();
+        float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+        direction /= length; // Normalize the direction
+
+        myMage.FireBullet(false, direction); // Now with the direction argument
     }
+
 
     // Declare an sf::Clock object
     sf::Clock clock;
@@ -148,8 +154,17 @@ int main() {
 
             bool isSpacePressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
             if (isSpacePressed && !spacebarPressed) {
-                std::cout << "Spacebar pressed. Firing bullet." << std::endl;
-                myMage.FireBullet(false); // Fire a bullet
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                sf::Vector2f direction = mousePos - myMage.getPosition();
+                float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+                direction /= length; // Normalize the direction
+
+                myMage.FireBullet(false, direction); // Pass the direction to the FireBullet method
+
+                spacebarPressed = true;
+            }
+            else if (!isSpacePressed) {
+                spacebarPressed = false;
             }
             spacebarPressed = isSpacePressed; // Update the state of spacebarPressed
 
