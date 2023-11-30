@@ -54,6 +54,12 @@ add_executable(CW_practice ${SOURCES} )
 target_include_directories(CW_practice SYSTEM PRIVATE ${SFML_INCS})
 target_link_libraries(CW_practice sfml-graphics)
 
+## set09121_CW
+file(GLOB_RECURSE SOURCES set09121_CW/*.cpp set09121_CW/*.h)
+add_executable(set09121_CW ${SOURCES} )
+target_include_directories(set09121_CW SYSTEM PRIVATE ${SFML_INCS})
+target_link_libraries(set09121_CW sfml-graphics)
+
 #### Link Dependencies ####
 foreach (exe ${EXECUTABLES})
   #Set working directory to build dir in visual studio
