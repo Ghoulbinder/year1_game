@@ -10,10 +10,11 @@
 using namespace std;
 using namespace sf;
 
-
 sf::Texture spritesheet;
-sf::Texture bulletTexture; // Declare a texture for the bullet
-sf::Sprite invader;
+sf::Texture mageSpritesheet; // Texture for the Mage
+sf::Texture slimeSpritesheet; // Texture for the Slime
+sf::Texture bulletTexture; // Texture for the bullet
+
 Mage* playerMage = nullptr; // Initialize the static member
 std::vector<Bullet*> bullets;
 PauseMenu pauseMenu;
@@ -31,26 +32,34 @@ void InitializeBulletPool() {
 }
 
 
+
+
 void Load() {
-    if (!spritesheet.loadFromFile("C:/Users/romeo/year1_game/res/img/mage.png")) {
-        std::cerr << "Failed to load spritesheet." << std::endl;
-        
+    // Load the Mage spritesheet
+    if (!mageSpritesheet.loadFromFile("C:/Users/romeo/year1_game/res/img/mage.png")) {
+        std::cerr << "Failed to load Mage spritesheet." << std::endl;
     }
     else {
-        std::cout << "Mage spritesheet loaded successfully." << std::endl; // Debug statement
+        std::cout << "Mage spritesheet loaded successfully." << std::endl;
     }
 
+    // Load the Slime spritesheet
+    if (!slimeSpritesheet.loadFromFile("C:/Users/romeo/year1_game/res/img/slime_brown.png")) {
+        std::cerr << "Failed to load Slime spritesheet." << std::endl;
+    }
+    else {
+        std::cout << "Slime spritesheet loaded successfully." << std::endl;
+    }
 
     // Load the bullet texture using bulletTexture
     if (!bulletTexture.loadFromFile("C:/Users/romeo/year1_game/res/img/Fireball-1.png")) {
         std::cerr << "Failed to load bullet texture." << std::endl;
     }
     else {
-        std::cout << "Bullet texture loaded successfully." << std::endl; // Debug statement
+        std::cout << "Bullet texture loaded successfully." << std::endl;
     }
-
-   
 }
+
 
 
 int main() {
@@ -79,13 +88,18 @@ int main() {
 
     // Get the start position from the level system
     sf::Vector2f startPos = LevelSystem::getStartTilePosition();
+    sf::Vector2f enemyPos = LevelSystem::getEnemyTilePosition();
     if (startPos.x < 0 || startPos.y < 0) {
         std::cerr << "Start position not found in the level." << std::endl;
         return 1;
     }
+    // Create an instance of the Slime class and set its texture using the loaded spritesheet
+    Slime slime(sf::IntRect(0, 0, 49, 62), enemyPos, slimeSpritesheet);
+    slime.setTexture(slimeSpritesheet); // Set the texture for the Slime
 
-    //create a Mage instance
-    Mage myMage(sf::IntRect(0, 0, 35, 37), startPos);
+    // Create an instance of the Mage class and set its texture using the loaded spritesheet
+    Mage myMage(sf::IntRect(0, 0, 35, 37), startPos, mageSpritesheet);
+    myMage.setTexture(mageSpritesheet); // Set the texture for the Mage
 
 
     // Load the background image
@@ -151,7 +165,8 @@ int main() {
             // Place all update logic here
             myMage.Update(dt);
             Bullet::Update(dt);
-
+            slime.Update(dt); 
+           
             // Get the current view from the window
             const sf::View& currentView = window.getView();
 
@@ -181,6 +196,7 @@ int main() {
             // Draw gameplay elements
             window.draw(backgroundSprite);
             LevelSystem::Render(window);
+            window.draw(slime);
             window.draw(myMage);
             Bullet::Render(window);
 

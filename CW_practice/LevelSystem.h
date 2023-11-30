@@ -19,6 +19,7 @@ public:
     static TILE getTile(sf::Vector2ul);
     static sf::Vector2f getTilePosition(sf::Vector2ul);
     static sf::Vector2f getStartTilePosition();  // Declare this method
+    static sf::Vector2f getEnemyTilePosition();
    
 
 

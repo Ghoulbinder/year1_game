@@ -11,7 +11,7 @@ using namespace std;
 Entity::Entity() {};
 
 //constructor with an initialization list
-Entity::Entity(sf::IntRect ir, sf::Vector2f pos) : _sprite() {
+Entity::Entity(sf::IntRect ir, sf::Vector2f pos, sf::Texture& texture) : _sprite(), _texture(texture) {
     _sprite = ir;
     setTexture(spritesheet);
     setTextureRect(_sprite);
@@ -28,8 +28,37 @@ Entity::~Entity() {
 
 
 
-Mage::Mage(sf::IntRect ir, sf::Vector2f pos)
-    : Entity(),
+Slime::Slime(sf::IntRect ir, sf::Vector2f pos, sf::Texture& texture)
+    : Entity(ir, pos, texture), // Initialize the base class (Entity) constructor
+    idleAnimation(0, 0, 49, 62, 3, 0.2f),
+    attackAnimation(0, 62, 49, 62, 3, 0.2f),
+    movingAnimation(0, 2 * 62, 49, 62, 3, 0.2f) {
+    // Set the initial animation (e.g., idle)
+    // You can change this based on the Slime's state in your game
+    // Example:
+    currentAnimation = &idleAnimation;
+}
+
+
+void Slime::Update(const float& dt) {
+    // Update the current animation
+    currentAnimation->Update(dt);
+
+    // Handle other logic specific to the Slime entity
+    // ...
+
+    // Apply the current animation to the Slime's sprite
+    currentAnimation->ApplyToSprite(*this);
+}
+
+void Slime::FireBullet(bool mode, const sf::Vector2f& direction) {
+    // Implement the FireBullet logic for the Slime entity
+    // ...
+}
+
+
+Mage::Mage(sf::IntRect ir, sf::Vector2f pos, sf::Texture& texture)
+    : Entity(ir, pos, texture),
     walkDownAnimation(0, 0, 35, 37, 4, 0.2f), // Set the sprite size to 35x37 pixels
     walkUpAnimation(0, 38, 35, 37, 4, 0.2f), // Assuming each row is 37 pixels apart
     walkRightAnimation(0, 75, 35, 37, 4, 0.2f), // 2 rows down
@@ -133,23 +162,7 @@ void Mage::Update(const float& dt) {
         }
     }
 
-    // Check if the direction has changed and reset the animation frame if it has
-    if (currentDirection != previousDirection) {
-        switch (currentDirection) {
-        case Direction::Down:
-            walkDownAnimation.Reset(); // Reset the animation frame for down
-            break;
-        case Direction::Up:
-            walkUpAnimation.Reset(); // Reset the animation frame for up
-            break;
-        case Direction::Left:
-            walkLeftAnimation.Reset(); // Reset the animation frame for left
-            break;
-        case Direction::Right:
-            walkRightAnimation.Reset(); // Reset the animation frame for right
-            break;
-        }
-    }
+    
 
 
     // Check for collisions with walls
@@ -159,27 +172,27 @@ void Mage::Update(const float& dt) {
         // Reset the position to the previous position to prevent passing through walls
         setPosition(currentPosition);
     }
-
+      
     // Update animation based on the direction
-    switch (currentDirection) {
-    case Direction::Down:
-        walkDownAnimation.Update(dt);
-        walkDownAnimation.ApplyToSprite(*this);
-        break;
+    switch (currentDirection) { 
+    case Direction::Down: 
+        walkDownAnimation.Update(dt); 
+        walkDownAnimation.ApplyToSprite(*this); 
+        break; 
     case Direction::Up:
-        walkUpAnimation.Update(dt);
-        walkUpAnimation.ApplyToSprite(*this);
-        break;
-    case Direction::Left:
-        walkRightAnimation.Update(dt); // Use walkRightAnimation when moving left
-        walkRightAnimation.ApplyToSprite(*this);
-        setScale(-1.f, 1.f); // Flip the sprite horizontally
-        break;
-    case Direction::Right:
-        walkRightAnimation.Update(dt);
-        walkRightAnimation.ApplyToSprite(*this);
-        setScale(1.f, 1.f); // Reset the sprite scale
-        break;
+        walkUpAnimation.Update(dt); 
+        walkUpAnimation.ApplyToSprite(*this); 
+        break; 
+    case Direction::Left: 
+        walkRightAnimation.Update(dt); // Use walkRightAnimation when moving left 
+        walkRightAnimation.ApplyToSprite(*this); 
+        setScale(-1.f, 1.f); // Flip the sprite horizontally 
+        break;  
+    case Direction::Right: 
+        walkRightAnimation.Update(dt);  
+        walkRightAnimation.ApplyToSprite(*this); 
+        setScale(1.f, 1.f); // Reset the sprite scale 
+        break; 
 
 
     }
