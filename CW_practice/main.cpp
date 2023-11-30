@@ -152,6 +152,15 @@ int main() {
             myMage.Update(dt);
             Bullet::Update(dt);
 
+            // Get the current view from the window
+            const sf::View& currentView = window.getView();
+
+            // Get mouse position in screen coordinates
+            sf::Vector2i screenMousePos = sf::Mouse::getPosition(window);
+
+            // Convert screen coordinates to world coordinates
+            sf::Vector2f worldMousePos = window.mapPixelToCoords(screenMousePos, currentView);
+
             bool isSpacePressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
             if (isSpacePressed && !spacebarPressed) {
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
