@@ -55,6 +55,10 @@ Mage::Mage(sf::IntRect ir, sf::Vector2f pos)
 }
 
 void Mage::FireBullet(bool mode) {
+    // Debug statement to indicate this method is called
+    std::cout << "Mage::FireBullet called" << std::endl;
+
+
     // Calculate the position below the Mage's head
     sf::Vector2f bulletPosition = getPosition();
     bulletPosition.x += getLocalBounds().width / 2.0f; // Center horizontally

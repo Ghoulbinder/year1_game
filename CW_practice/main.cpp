@@ -40,12 +40,13 @@ void Load() {
         std::cout << "Mage spritesheet loaded successfully." << std::endl; // Debug statement
     }
 
-    // Load the texture for the bullet
-    if (!spritesheet.loadFromFile("C:/Users/romeo/year1_game/res/img/mage.png")) {
-        std::cerr << "Failed to load spritesheet." << std::endl;
+
+    // Load the bullet texture using bulletTexture
+    if (!bulletTexture.loadFromFile("C:/Users/romeo/year1_game/res/img/Fireball-1.png")) {
+        std::cerr << "Failed to load bullet texture." << std::endl;
     }
     else {
-        std::cout << "Bullet spritesheet loaded successfully." << std::endl; // Debug statement
+        std::cout << "Bullet texture loaded successfully." << std::endl; // Debug statement
     }
 
    
@@ -145,16 +146,13 @@ int main() {
             myMage.Update(dt);
             Bullet::Update(dt);
 
-            // Check for spacebar key press and fire a bullet from the Mage
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-                if (!spacebarPressed) {
-                    myMage.FireBullet(false);
-                }
-                spacebarPressed = true;
+            bool isSpacePressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+            if (isSpacePressed && !spacebarPressed) {
+                std::cout << "Spacebar pressed. Firing bullet." << std::endl;
+                myMage.FireBullet(false); // Fire a bullet
             }
-            else {
-                spacebarPressed = false;
-            }
+            spacebarPressed = isSpacePressed; // Update the state of spacebarPressed
+
 
             // Draw gameplay elements
             window.draw(backgroundSprite);

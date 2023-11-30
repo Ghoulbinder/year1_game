@@ -13,5 +13,6 @@ constexpr uint16_t gameHeight = 900;
 
 extern sf::Texture spritesheet;
 extern std::vector<Bullet*> bullets;
+extern sf::Texture bulletTexture;
 
 extern Mage* playerMage; // Declare playerMage
