@@ -1,6 +1,6 @@
 //"actor_movement.h"
 #pragma once
-#include "EntityComponentManager.h"
+#include "Entity.h"
 
 class ActorMovementComponent : public Component {
 protected:
@@ -18,5 +18,5 @@ public:
     void move(float x, float y);
 
     void render() override {}
-    void update(double dt) override;
+    void update(const float& dt) override;
 };

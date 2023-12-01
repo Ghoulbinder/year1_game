@@ -1,15 +1,21 @@
+#include "Entity.h"
 #include "cmp_enemy_ai.h"
 #include "LevelSystem.h"
+#include "cmp_player_movement.h"
 #include <cmath>
 #include <iostream>
 
 using namespace sf;
 
+// Function prototypes for normalize and length 
+Vector2f normalize(const Vector2f & v);  
+float length(const Vector2f & v);
+
 EnemyAIComponent::EnemyAIComponent(Entity* p, std::function<sf::Vector2f()> getPlayerPosition, float enemySpeed)
     : ActorMovementComponent(p), _getPlayerPosition(getPlayerPosition), _enemySpeed(enemySpeed) {}
 
-void EnemyAIComponent::update(double dt) {
-    const auto mva = (float)(dt * _enemySpeed); // Use the ghost's speed
+void EnemyAIComponent::update(const float& dt) {
+    const auto mva = (float)(dt * _enemySpeed); // Using the ghost's speed
     const sf::Vector2f pos = _parent->getPosition();
 
     // Get the player's current position
@@ -21,16 +27,22 @@ void EnemyAIComponent::update(double dt) {
         direction = normalize(direction);
     }
 
-    // Move towards the player
-    const Vector2f newpos = pos + direction * mva;
-    if (LevelSystem::getTile(newpos) != LevelSystem::WALL) {
-        move(direction * mva);
-    }
-    else {
+    // Move the enemy
+    _parent->move(direction * mva);
+
+    // Convert Vector2f to Vector2ul for LevelSystem
+    sf::Vector2i intPos = static_cast<sf::Vector2i>(pos); // First convert to Vector2i
+    sf::Vector2ul tilePosition(static_cast<unsigned long>(intPos.x), static_cast<unsigned long>(intPos.y)); // Then to Vector2ul
+
+    // Check the TILE type
+    if (LevelSystem::getTile(tilePosition) == LevelSystem::TILE::WALL) {
         // Handle collision with wall
     }
-
 }
+
+
+
+
 
 // Utility function to normalize a vector
 Vector2f normalize(const Vector2f& v) {

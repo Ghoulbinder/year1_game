@@ -4,7 +4,7 @@
 #include <vector>
 
 
-class Entity;
+//class Entity;
 class Bullet; // forward-declare Bullet
 
 constexpr uint16_t gameWidth = 800;

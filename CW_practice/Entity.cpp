@@ -18,8 +18,13 @@ Entity::Entity(sf::IntRect ir, sf::Vector2f pos, sf::Texture& texture) : _sprite
     setPosition(pos);
     // Initialize other member variables if needed
 }
+const sf::Vector2f& Entity::getPosition() const {
+    return _position;
+}
 
-
+void Entity::setPosition(const sf::Vector2f& position) {
+    _position = position;
+}
 void Entity::Update(const float& dt) {}
 
 Entity::~Entity() {

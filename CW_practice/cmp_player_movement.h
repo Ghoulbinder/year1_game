@@ -1,6 +1,6 @@
-//"cmp_actor_movement.h"
+//"cmp_player_movement.h"
 #pragma once
-#include "EntityComponentManager.h"
+#include "Entity.h"
 #include "LevelSystem.h"
 
 
@@ -20,5 +20,5 @@ public:
     void move(float x, float y);
 
     void render() override {}
-    void update(double dt) override;
+    void update(const float& dt) override;
 };

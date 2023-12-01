@@ -1,7 +1,7 @@
 #pragma once
 #include <functional>
 #include "cmp_player_movement.h"
-#include "EntityComponentManager.h"
+#include "Entity.h"
 
 class EnemyAIComponent : public ActorMovementComponent {
 private:
@@ -11,5 +11,7 @@ private:
 public:
     EnemyAIComponent(Entity* p, std::function<sf::Vector2f()> getPlayerPosition, float ghostSpeed);
 
-    void update(double dt) override;
+
+
+    void update(const float& dt) override;
 };

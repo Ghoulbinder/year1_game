@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 
-class Entity;
+//class Entity;
 
 class EntityManager {
 public:

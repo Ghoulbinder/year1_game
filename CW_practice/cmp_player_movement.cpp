@@ -1,16 +1,25 @@
 //"cmp_player_movement.cpp"
 #include "cmp_player_movement.h"
-#include "cmp_enemy_ai.h"
 #include "LevelSystem.h"
+
 
 using namespace sf;
 
-ActorMovementComponent::ActorMovementComponent(Entity* p)
-    : _speed(100.f), Component(p) {}
+ActorMovementComponent::ActorMovementComponent(Entity* p) : _speed(100.f) {
+    setParent(p); // Associate the parent entity
+}
+
+// ... rest of your implementation ...
+
+
 
 bool ActorMovementComponent::validMove(const sf::Vector2f& pos) {
-    return (LevelSystem::getTile(pos) != LevelSystem::WALL);
+    sf::Vector2i intPos = static_cast<sf::Vector2i>(pos); // Convert to Vector2i
+    sf::Vector2ul ulPos(static_cast<unsigned long>(intPos.x), static_cast<unsigned long>(intPos.y)); // Convert to Vector2ul
+
+    return (LevelSystem::getTile(ulPos) != LevelSystem::WALL);
 }
+
 
 void ActorMovementComponent::move(const sf::Vector2f& p) {
     auto pp = _parent->getPosition() + p;
@@ -30,7 +39,7 @@ void ActorMovementComponent::setSpeed(float speed) {
     _speed = speed; 
 }
 
-void ActorMovementComponent::update(double dt) {
+void ActorMovementComponent::update(const float& dt) {
     float speed = getSpeed() * dt;
 
     if (Keyboard::isKeyPressed(Keyboard::W)) {

@@ -1,5 +1,6 @@
 #include "cmp_enemy_ai.h"
 #include "LevelSystem.h"
+#include "Entity.h"
 #include <cmath>
 #include <iostream>
 
