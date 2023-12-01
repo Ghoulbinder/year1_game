@@ -36,6 +36,7 @@ private:
     Animation walkLeftAnimation;
     Animation walkRightAnimation;
 
+    //std::shared_ptr<ActorMovementComponent> _movement;
     // Enumeration for directions
     enum class Direction { Up, Down, Left, Right };
     Direction currentDirection = Direction::Down; // Default direction
@@ -58,6 +59,7 @@ private:
     Animation idleAnimation;
     Animation attackAnimation;
     Animation movingAnimation;
+    float _speed;
 };
 
 
