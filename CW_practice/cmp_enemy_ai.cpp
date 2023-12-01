@@ -23,7 +23,7 @@ void EnemyAIComponent::update(double dt) {
 
     // Move towards the player
     const Vector2f newpos = pos + direction * mva;
-    if (LevelSystem::getTileAt(newpos) != LevelSystem::WALL) {
+    if (LevelSystem::getTile(newpos) != LevelSystem::WALL) {
         move(direction * mva);
     }
     else {

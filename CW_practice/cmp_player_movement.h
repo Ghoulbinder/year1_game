@@ -1,6 +1,7 @@
 //"cmp_actor_movement.h"
 #pragma once
 #include "EntityComponentManager.h"
+#include "LevelSystem.h"
 
 
 class ActorMovementComponent : public Component {
