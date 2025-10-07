@@ -1,4 +1,4 @@
-# Year 1 Game
+# PAC MAC & SPACE INVADERS
 
 A web-based game built with JavaScript and Phaser.js featuring multiple interactive levels and gameplay mechanics.
 
