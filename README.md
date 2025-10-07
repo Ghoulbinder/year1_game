@@ -111,8 +111,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🙏 Acknowledgments
 
 - Phaser.js community and documentation
-- [Any tutorials or resources you used]
-- [University/Course name if appropriate]
+- [Edinburgh Napier University/Game Developemnt]
 
 ---
 
