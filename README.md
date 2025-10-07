@@ -104,8 +104,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👤 Author
 
-**[Your Name]**
-- GitHub: [@cloudsaber](https://github.com/cloudsaber)
+**Romeo MCdonald]**
+- GitHub: [@Ghoulbinder](https://github.com/Ghoulbinder)
 - [Add LinkedIn, Portfolio, or other links]
 
 ## 🙏 Acknowledgments
